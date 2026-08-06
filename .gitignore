@@ -1,0 +1,5 @@
+sim_build
+*.vcd
+*.dat
+coverage
+sim/__pycache__
