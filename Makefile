@@ -3,8 +3,8 @@ SIM ?= verilator
 TOPLEVEL_LANG ?= verilog
 N ?= 16
 
-# RTL source file (Make sure the path matches your file location)
-VERILOG_SOURCES = $(PWD)/src/fp_arb.sv
+# Read all file paths from flist.f into VERILOG_SOURCES, ignoring empty lines & comments
+VERILOG_SOURCES = $(addprefix $(PWD)/, $(shell grep -v '^\s*//' $(PWD)/flist.f | grep -v '^\s*$$'))
 
 # SystemVerilog top-level module name inside fp_arb.sv
 TOPLEVEL = fp_arb
