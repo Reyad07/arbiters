@@ -30,12 +30,16 @@ module fp_arb #(
     always_comb higher_pri_reqs [0] = 1'b0;
 
     // Logic to choose higher priority requests: parallel ripple OR logic
-    always_comb higher_pri_reqs[N-1:1] = higher_pri_reqs[N-2:0] | req_i[N-2:0];
+    always_comb begin
+        for (int i = 1; i < N; i++) begin
+            higher_pri_reqs[i] = higher_pri_reqs[i-1] | req_i[i-1];
+        end
+    end
     
     // Final grant vector generation
     // a requester receives a grant only if it requested access and no lower-indexed 
     // (higher_priority) requester is active
-    always_comb grant_o[N-1:0] = req_i[N-1:0] & ~higher_pri_reqs[N-1:0];
+    always_comb grant_o = req_i  & ~higher_pri_reqs;
 
 endmodule
 
