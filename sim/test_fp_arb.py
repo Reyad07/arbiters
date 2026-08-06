@@ -5,9 +5,15 @@ from cocotb.triggers import Timer
 import random
 import logging
 from colorama import Fore, Style
+import os
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+if ("DEBUG" in os.environ):
+    DEBUG = int(os.environ["DEBUG"])
+else:
+    DEBUG = 0
 
 @cocotb.test()
 async def basic_fp_test(dut):
@@ -28,8 +34,9 @@ async def basic_fp_test(dut):
         dut.req_i.value = req_i 
         await Timer(1,unit="ns")
 
-        logger.info(f"{Fore.GREEN} TB: reqester value {req_i}{Style.RESET_ALL}")
-        logger.info(f"{Fore.GREEN}DUT: reqester value {dut.req_i.value}{Style.RESET_ALL}")
+        if (DEBUG):
+            logger.info(f"{Fore.GREEN} TB: reqester value {req_i}{Style.RESET_ALL}")
+            logger.info(f"{Fore.GREEN}DUT: reqester value {dut.req_i.value}{Style.RESET_ALL}")
 
         result = dut.grant_o.value
 
